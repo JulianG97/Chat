@@ -85,7 +85,9 @@ namespace Server
 
         public static void CreateNewUser(string username, string password, TcpClient client)
         {
-            string path = @"C:\Chat\Server\User\" + username + ".txt";
+            string path = Directory.GetCurrentDirectory();
+
+            path = path + @"\User\" + username + ".txt";
 
             if (File.Exists(path) == true) 
             {
