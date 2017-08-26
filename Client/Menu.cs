@@ -241,39 +241,39 @@ namespace Client
                             {
                                 throw new ArgumentException("The password must match the confirmation password!");
                             }
-                        }
 
-                        Protocol registrationRequest = ProtocolCreator.RegistrationRequest(username, password);
+                            Protocol registrationRequest = ProtocolCreator.RegistrationRequest(username, password);
 
-                        settings.CheckConfigFile();
+                            settings.CheckConfigFile();
 
-                        IPEndPoint server = new IPEndPoint(settings.ServerIP, settings.ServerPort);
+                            IPEndPoint server = new IPEndPoint(settings.ServerIP, settings.ServerPort);
 
-                        TcpClient client = new TcpClient();
+                            TcpClient client = new TcpClient();
 
-                        NetworkManager.Connect(server, client);
+                            NetworkManager.Connect(server, client);
 
-                        NetworkStream stream = client.GetStream();
+                            NetworkStream stream = client.GetStream();
 
-                        NetworkManager.SendMessage(registrationRequest, stream);
+                            NetworkManager.SendMessage(registrationRequest, stream);
 
-                        string registrationResponse = NetworkManager.ReadMessage(stream, 6);
+                            string registrationResponse = NetworkManager.ReadMessage(stream, 6);
 
-                        if (registrationResponse == "CHATRI")
-                        {
-                            throw new ArgumentException("The username already exists! Please try another one!");
-                        }
-                        else if (registrationResponse == "CHATRO")
-                        {
-                            Console.WriteLine();
-                            Console.WriteLine();
-                            Console.WriteLine("The registration was successful! You can login now!");
-                            Console.WriteLine();
-                            Console.WriteLine("Press any key to continue!");
+                            if (registrationResponse == "CHATRI")
+                            {
+                                throw new ArgumentException("The username already exists! Please try another one!");
+                            }
+                            else if (registrationResponse == "CHATRO")
+                            {
+                                Console.WriteLine();
+                                Console.WriteLine();
+                                Console.WriteLine("The registration was successful! You can login now!");
+                                Console.WriteLine();
+                                Console.WriteLine("Press any key to continue!");
 
-                            Console.CursorVisible = false;
+                                Console.CursorVisible = false;
 
-                            Console.ReadKey(true);
+                                Console.ReadKey(true);
+                            }
                         }
                     }                 
                 }
