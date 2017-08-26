@@ -44,7 +44,7 @@ namespace Server
                 // Exit the server application
                 else if (cki.Key == ConsoleKey.E)
                 {
-                    listener.Stop();
+                    StopServer();
 
                     break;
                 }
@@ -89,11 +89,18 @@ namespace Server
 
         public static void StopServer()
         {
-            serverRunning = false;
+            if (serverRunning == true)
+            {
+                serverRunning = false;
 
-            listener.Stop();
+                listener.Stop();
 
-            Console.WriteLine("The server has been stopped successfully!");
+                Console.WriteLine("The server has been stopped successfully!");
+            }
+            else if (serverRunning == false)
+            {
+                Console.WriteLine("The server has been stopped already! You can't stop the server again!");
+            }
         }
 
         public static void StartListening()
@@ -102,6 +109,13 @@ namespace Server
 
             while (serverRunning == true)
             {
+                if (!listener.Pending())
+                {
+                    Thread.Sleep(100);
+
+                    continue;
+                }
+
                 TcpClient client = listener.AcceptTcpClient();
                 Thread session = new Thread(new ParameterizedThreadStart(HandleNewSession));
                 session.Start(client);
