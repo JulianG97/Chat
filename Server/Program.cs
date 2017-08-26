@@ -136,5 +136,62 @@ namespace Server
                 userRequestManager.HandleUserRequest(userRequest, client);
             }
         }
+
+        public static void CheckConfigFile(out int port, out string userPath)
+        {
+            string path = Directory.GetCurrentDirectory();
+            path = path + @"\config.txt";
+
+            if (File.Exists(path) == true)
+            {
+                string[] configContent = File.ReadAllLines(path);
+
+                port = CheckConfigPort(configContent[0]);
+            }
+            else if (File.Exists(path) == false)
+            {
+
+            }
+        }
+
+        public static void GenerateDefaultConfigFile()
+        {
+
+        }
+
+        public static int CheckConfigPort(string portLine)
+        {
+            char[] portArray = portLine.ToCharArray();
+
+            int port;
+
+            if (portArray[0] == 'P' && portArray[1] == 'O' && portArray[2] == 'R' && portArray[3] == 'T' && portArray[4] == ':' && portArray[5] == ' ')
+            {
+                string portString = string.Empty;
+
+                for (int i = 6; i < portArray.Length; i++)
+                {
+                    portString = portString + portArray[i];
+                }
+
+                if (int.TryParse(portString, out port) == true)
+                {
+                    return port;
+                }
+                else if (int.TryParse(portString, out port) == false)
+                {
+                    GenerateDefaultConfigFile();
+                }
+            }
+            else
+            {
+                GenerateDefaultConfigFile();
+            }
+        }
+
+        public static void CheckConfigUserPath()
+        {
+
+        }
     }
 }
