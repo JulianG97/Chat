@@ -13,18 +13,94 @@ namespace Server
     public class Program
     {
         private List<User> onlineUser = new List<User>();
+        private static bool serverRunning = false;
+        private static TcpListener listener = new TcpListener(IPAddress.Any, 80);
 
         public static void Main(string[] args)
         {
-            StartListening();
+            ShowHeader();
+
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.CursorVisible = false;
+
+            Console.WriteLine();
+            Console.WriteLine("[S] Start server [Q] Stop server [O] Show online users [E] Exit server application");
+            Console.WriteLine();
+
+            while (true)
+            {
+                ConsoleKeyInfo cki = Console.ReadKey(true);
+
+                // Start the server
+                if (cki.Key == ConsoleKey.S)
+                {
+                    StartServer();
+                }
+                // Stop the server
+                else if (cki.Key == ConsoleKey.Q)
+                {
+                    StopServer();
+                }
+                // Exit the server application
+                else if (cki.Key == ConsoleKey.E)
+                {
+                    listener.Stop();
+
+                    break;
+                }
+                // Displays the users who are online
+                else if (cki.Key == ConsoleKey.O)
+                {
+
+                }
+            }
+        }
+
+        public static void ShowHeader()
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+
+            Console.WriteLine(" ______     __  __     ______     ______");
+            Console.WriteLine("/\\  ___\\   /\\ \\_\\ \\   /\\  __ \\   /\\__  _\\");
+            Console.WriteLine("\\ \\ \\____  \\ \\  __ \\  \\ \\  __ \\  \\/_/\\ \\/");
+            Console.WriteLine(" \\ \\_____\\  \\ \\_\\ \\_\\  \\ \\_\\ \\_\\    \\ \\_\\");
+            Console.WriteLine("  \\/_____/   \\/_/\\/_/   \\/_/\\/_/     \\/_/");
+
+            Console.ResetColor();
+        }
+
+        public static void StartServer()
+        {
+            if (serverRunning == true)
+            {
+                Console.WriteLine("The server is already running! You can't start the server again!");
+            }
+            else if (serverRunning == false)
+            {
+                Thread startServer = new Thread(StartListening);
+
+                serverRunning = true;
+
+                Console.WriteLine("The sever has been started successfully!");
+
+                startServer.Start();
+            }
+        }
+
+        public static void StopServer()
+        {
+            serverRunning = false;
+
+            listener.Stop();
+
+            Console.WriteLine("The server has been stopped successfully!");
         }
 
         public static void StartListening()
         {
-            TcpListener listener = new TcpListener(IPAddress.Any, 80);
             listener.Start();
 
-            while (true)
+            while (serverRunning == true)
             {
                 TcpClient client = listener.AcceptTcpClient();
                 Thread session = new Thread(new ParameterizedThreadStart(HandleNewSession));
