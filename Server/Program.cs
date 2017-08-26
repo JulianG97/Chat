@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Net.Sockets;
 using System.Threading;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.IO;
 
 namespace Server
@@ -88,6 +89,8 @@ namespace Server
                 serverRunning = true;
 
                 Console.WriteLine("The sever has been started successfully!");
+                Console.WriteLine("IP Address: {0}", GetLocalIPAddress());
+                Console.WriteLine("Port: {0}", settings.ServerPort);
 
                 startServer.Start();
             }
@@ -107,6 +110,21 @@ namespace Server
             {
                 Console.WriteLine("The server isn't running! You can't stop the server!");
             }
+        }
+
+        public static IPAddress GetLocalIPAddress()
+        {
+            IPAddress[] localIPs = Dns.GetHostAddresses(Dns.GetHostName());
+
+            foreach(IPAddress ip in localIPs)
+            {
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    return ip;
+                }
+            }
+
+            return IPAddress.Parse("0.0.0.0");
         }
 
         public static void StartListening()

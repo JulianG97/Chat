@@ -67,12 +67,12 @@ namespace Client
 
             string[] configFile = new string[2];
 
-            configFile[0] = "IP: 10.0.0.7";
+            configFile[0] = "IP: 127.0.0.1";
             configFile[1] = "Port: 80";
 
             File.WriteAllLines(configPath + @"\config.txt", configFile);
 
-            this.ServerIP = IPAddress.Parse("10.0.0.7");
+            this.ServerIP = IPAddress.Parse("127.0.0.1");
             this.ServerPort = 80;
         }
 
