@@ -10,6 +10,8 @@ namespace Client
 {
     public class Menu
     {
+        private static Settings settings = new Settings();
+
         public static void DisplayMainMenu()
         {
             string[] menuItems = { "Login", "Register", "Exit" };
@@ -243,7 +245,9 @@ namespace Client
 
                         Protocol registrationRequest = ProtocolCreator.RegistrationRequest(username, password);
 
-                        IPEndPoint server = new IPEndPoint(IPAddress.Parse("10.0.0.7"), 80);
+                        settings.CheckConfigFile();
+
+                        IPEndPoint server = new IPEndPoint(settings.ServerIP, settings.ServerPort);
 
                         TcpClient client = new TcpClient();
 

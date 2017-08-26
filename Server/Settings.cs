@@ -75,6 +75,9 @@ namespace Server
             {
                 Directory.CreateDirectory(configPath + @"\User");
             }
+
+            this.ServerPort = 80;
+            this.ServerUserPath = configPath + @"\User";
         }
 
         public void CheckConfigPort(string portLine, out int port)

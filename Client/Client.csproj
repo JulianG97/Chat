@@ -53,6 +53,7 @@
     <Compile Include="Protocol\Protocol.cs" />
     <Compile Include="Protocol\ProtocolCreator.cs" />
     <Compile Include="Protocol\ProtocolTypes.cs" />
+    <Compile Include="Settings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
