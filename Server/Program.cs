@@ -47,7 +47,10 @@ namespace Server
                 // Exit the server application
                 else if (cki.Key == ConsoleKey.E)
                 {
-                    StopServer();
+                    if (serverRunning == true)
+                    {
+                        StopServer();
+                    }
 
                     break;
                 }
