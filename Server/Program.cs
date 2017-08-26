@@ -22,8 +22,6 @@ namespace Server
         {
             ShowHeader();
 
-            Console.Title = "Chat Server";
-
             Console.ForegroundColor = ConsoleColor.White;
             Console.CursorVisible = false;
 
