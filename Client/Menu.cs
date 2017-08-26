@@ -142,6 +142,52 @@ namespace Client
                         {
                             throw new ArgumentException("The password must not be empty and between 6 and 12 characters!");
                         }
+
+                        settings.CheckConfigFile();
+
+                        IPEndPoint server = new IPEndPoint(settings.ServerIP, settings.ServerPort);
+
+                        TcpClient client = new TcpClient();
+
+                        NetworkManager.Connect(server, client);
+
+                        NetworkStream stream = client.GetStream();
+
+                        Protocol loginRequest = ProtocolCreator.LoginRequest(username, password);
+
+                        NetworkManager.SendMessage(loginRequest, stream);
+
+                        string loginResponse = NetworkManager.ReadMessage(stream, 38);
+
+                        if (loginResponse == "CHATLI")
+                        {
+                            throw new ArgumentException("The username or the password is invalid!");
+                        }
+                        else
+                        {
+                            char[] loginResponseArray = loginResponse.ToCharArray();
+
+                            if (loginResponseArray[0] == 'C' && loginResponseArray[1] == 'H' && loginResponseArray[2] == 'A' && loginResponseArray[3] == 'T' && loginResponseArray[4] == 'L' && loginResponseArray[5] == 'O')
+                            {
+                                string sessionKey = string.Empty;
+
+                                for (int i = 6; i < loginResponseArray.Length; i++)
+                                {
+                                    sessionKey = sessionKey + loginResponseArray[i];
+                                }
+
+                                Console.WriteLine();
+                                Console.WriteLine();
+                                Console.WriteLine("You have logged in successfully!");
+                                Console.WriteLine("Your session key is: {0}", sessionKey);
+                                Console.WriteLine();
+                                Console.WriteLine("Press any key to continue!");
+
+                                Console.CursorVisible = false;
+
+                                Console.ReadKey(true);
+                            }
+                        }
                     }
                 }
             }
@@ -242,8 +288,6 @@ namespace Client
                                 throw new ArgumentException("The password must match the confirmation password!");
                             }
 
-                            Protocol registrationRequest = ProtocolCreator.RegistrationRequest(username, password);
-
                             settings.CheckConfigFile();
 
                             IPEndPoint server = new IPEndPoint(settings.ServerIP, settings.ServerPort);
@@ -253,6 +297,8 @@ namespace Client
                             NetworkManager.Connect(server, client);
 
                             NetworkStream stream = client.GetStream();
+
+                            Protocol registrationRequest = ProtocolCreator.RegistrationRequest(username, password);
 
                             NetworkManager.SendMessage(registrationRequest, stream);
 

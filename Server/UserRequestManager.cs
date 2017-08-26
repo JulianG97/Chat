@@ -48,6 +48,67 @@ namespace Server
             }
         }
 
+        public static void VerifyUserLogin(string username, string password, TcpClient client, string userPath)
+        {
+            string path = userPath + @"\" + username + ".txt";
+
+            if (File.Exists(path) == false)
+            {
+                Protocol loginInvalid = ProtocolCreator.LoginInvalid();
+
+                NetworkManager.SendMessage(loginInvalid, client);
+            }
+            else if (File.Exists(path) == true)
+            {
+                if (VerifyUserData(username, password, path) == true)
+                {
+                    Protocol loginOK = ProtocolCreator.LoginOk();
+                    NetworkManager.SendMessage(loginOK, client);
+                }
+                else
+                {
+                    Protocol loginInvalid = ProtocolCreator.LoginInvalid();
+                    NetworkManager.SendMessage(loginInvalid, client);
+                }
+            }
+        }
+
+        public static bool VerifyUserData(string username, string password, string path)
+        {
+            string[] userFile = File.ReadAllLines(path);
+            string userFileUsername = string.Empty;
+            string userFilePassword = string.Empty;
+
+            char[] userFileUsernameArray = userFile[0].ToCharArray();
+
+            if (userFileUsernameArray[0] == 'U' && userFileUsernameArray[1] == 's' && userFileUsernameArray[2] == 'e' && userFileUsernameArray[3] == 'r' && userFileUsernameArray[4] == 'n' && userFileUsernameArray[5] == 'a' && userFileUsernameArray[6] == 'm' && userFileUsernameArray[7] == 'e' && userFileUsernameArray[8] == ':' && userFileUsernameArray[9] == ' ')
+            {
+                for (int i = 10; i < userFileUsernameArray.Length; i++)
+                {
+                    userFileUsername = userFileUsername + userFileUsernameArray[i];
+                }
+            }
+
+            char[] userFilePasswordArray = userFile[1].ToCharArray();
+
+            if (userFilePasswordArray[0] == 'P' && userFilePasswordArray[1] == 'a' && userFilePasswordArray[2] == 's' && userFilePasswordArray[3] == 's' && userFilePasswordArray[4] == 'w' && userFilePasswordArray[5] == 'o' && userFilePasswordArray[6] == 'r' && userFilePasswordArray[7] == 'd' && userFilePasswordArray[8] == ':' && userFilePasswordArray[9] == ' ')
+            {
+                for (int i = 10; i < userFilePasswordArray.Length; i++)
+                {
+                    userFilePassword = userFilePassword + userFilePasswordArray[i];
+                }
+            }
+
+            if (username == userFileUsername && password == userFilePassword)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public static void CreateNewUser(string username, string password, TcpClient client, string userPath)
         {
             string path = userPath + @"\" + username + ".txt";
