@@ -64,6 +64,8 @@ namespace Server
                 {
                     Protocol loginOK = ProtocolCreator.LoginOk();
                     NetworkManager.SendMessage(loginOK, client);
+
+                    Console.WriteLine("{0} has logged in!", username);
                 }
                 else
                 {
@@ -140,6 +142,8 @@ namespace Server
                     Protocol registrationOk = ProtocolCreator.RegistrationOk();
 
                     NetworkManager.SendMessage(registrationOk, client);
+
+                    Console.WriteLine("{0} has registered!", username);
                 }
             }
         }
