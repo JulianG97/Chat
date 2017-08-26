@@ -65,7 +65,7 @@ namespace Server
                     Protocol loginOK = ProtocolCreator.LoginOk();
                     NetworkManager.SendMessage(loginOK, client);
 
-                    Console.WriteLine("{0} has logged in!", username);
+                    Console.WriteLine("{0} ({1} has logged in!", username, ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
                 }
                 else
                 {
@@ -143,7 +143,7 @@ namespace Server
 
                     NetworkManager.SendMessage(registrationOk, client);
 
-                    Console.WriteLine("{0} has registered!", username);
+                    Console.WriteLine("{0} ({1}) has registered!", username, ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
                 }
             }
         }
