@@ -43,7 +43,7 @@ namespace Server
                 }
                 else if (splittedUserRequest[4] == 'L' && splittedUserRequest[5] == 'R')
                 {
-                    // Login Request
+                    VerifyUserLogin(username, password, client, userPath);
                 }
             }
         }
