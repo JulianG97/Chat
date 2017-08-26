@@ -11,7 +11,7 @@ namespace Server
 {
     public class UserRequestManager
     {
-        public void HandleUserRequest(string userRequest, TcpClient client)
+        public void HandleUserRequest(string userRequest, TcpClient client, string userPath)
         {
             char[] splittedUserRequest = userRequest.ToCharArray();
 
@@ -39,7 +39,7 @@ namespace Server
 
                 if (splittedUserRequest[4] == 'R' && splittedUserRequest[5] == 'R')
                 {
-                    CreateNewUser(username, password, client);
+                    CreateNewUser(username, password, client, userPath);
                 }
                 else if (splittedUserRequest[4] == 'L' && splittedUserRequest[5] == 'R')
                 {
@@ -48,11 +48,9 @@ namespace Server
             }
         }
 
-        public static void CreateNewUser(string username, string password, TcpClient client)
+        public static void CreateNewUser(string username, string password, TcpClient client, string userPath)
         {
-            string path = Directory.GetCurrentDirectory();
-
-            path = path + @"\User\" + username + ".txt";
+            string path = userPath + @"\" + username + ".txt";
 
             if (File.Exists(path) == true)
             {

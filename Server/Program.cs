@@ -139,7 +139,7 @@ namespace Server
             {
                 string userRequest = NetworkManager.ReadMessage(client, 28);
 
-                userRequestManager.HandleUserRequest(userRequest, client);
+                userRequestManager.HandleUserRequest(userRequest, client, serverUserPath);
             }
         }
 
@@ -192,6 +192,11 @@ namespace Server
             configFile[1] = "User Path: " + configPath + @"\User";
 
             File.WriteAllLines(configPath + @"\config.txt", configFile);
+
+            if (Directory.Exists(configPath + @"\User") == false)
+            {
+                Directory.CreateDirectory(configPath + @"\User");
+            }
         }
 
         public static void CheckConfigPort(string portLine, out int port)
@@ -229,12 +234,6 @@ namespace Server
                 if (Directory.Exists(userPathString) == true)
                 {
                     userPath = userPathString;
-                }
-                else if (Directory.Exists(userPathString) == false)
-                {
-                    userPath = Directory.GetCurrentDirectory() + @"\User";
-
-                    Directory.CreateDirectory(userPath);
                 }
             }
         }
