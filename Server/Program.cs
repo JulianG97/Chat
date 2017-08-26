@@ -184,7 +184,14 @@ namespace Server
 
         public static void GenerateDefaultConfigFile()
         {
+            string configPath = Directory.GetCurrentDirectory();
 
+            string[] configFile = new string[2];
+
+            configFile[0] = "Port: 80";
+            configFile[1] = "User Path: " + configPath + @"\User";
+
+            File.WriteAllLines(configPath + @"\config.txt", configFile);
         }
 
         public static void CheckConfigPort(string portLine, out int port)
@@ -222,6 +229,12 @@ namespace Server
                 if (Directory.Exists(userPathString) == true)
                 {
                     userPath = userPathString;
+                }
+                else if (Directory.Exists(userPathString) == false)
+                {
+                    userPath = Directory.GetCurrentDirectory() + @"\User";
+
+                    Directory.CreateDirectory(userPath);
                 }
             }
         }
