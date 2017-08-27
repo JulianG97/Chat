@@ -86,7 +86,7 @@ namespace Client
 
             Console.ForegroundColor = ConsoleColor.White;
 
-            Console.Write("[" + time + "]");
+            Console.Write("[" + time + "] ");
 
             switch (userGroup)
             {
