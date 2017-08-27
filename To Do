@@ -7,3 +7,4 @@
 - Bug: Output window crashes when input window is closed
 - Solution for: Don't read from network stream when stream has been already closed
 - Rewrite class design
+- (Rewrite protocol)
