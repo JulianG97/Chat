@@ -41,7 +41,7 @@ namespace Client
 
         /// <summary>
         /// The Login OK Protocol Type.
-        /// <para>Value: -</para>
+        /// <para>Value: Sessionkey</para>
         /// <para>Length: 32 (+ 6)</para>
         /// <para>Description: Login OK message with session key sent from the server to the client.</para>
         /// </summary>
@@ -54,5 +54,13 @@ namespace Client
         /// <para>Description: Login failed message sent from the server to the client.</para>
         /// </summary>
         public static byte[] LoginInvalid = { 76, 73 };
+
+        /// <summary>
+        /// The Session Data Protocol Type.
+        /// <para>Value: Username-Sessionkey</para>
+        /// <para>Length: 35 - 42 (+ 6)</para>
+        /// <para>Description: Session data sent from the output window to the input window.</para>
+        /// </summary>
+        public static byte[] SessionData = { 83, 68 };
     }
 }

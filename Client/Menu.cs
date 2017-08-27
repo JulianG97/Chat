@@ -188,10 +188,10 @@ namespace Client
 
                                 Console.ReadKey(true);
 
-                                Process.Start("Client.exe", "\\OpenInputWindow");
+                                Process.Start("Client.exe", "OpenInputWindow" + " " + settings.ServerIP + " " + settings.ServerPort);
 
-                                OutputWindow outputWindow = new OutputWindow();
-                                outputWindow.Start(username, sessionKey);
+                                OutputWindow outputWindow = new OutputWindow(username, sessionKey);
+                                outputWindow.Start();
                             }
                         }
                     }

@@ -3,12 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net;
+using System.Net.Sockets;
 
 namespace Client
 {
     public class OutputWindow
     {
-        public void Start(string username, string sessionKey)
+        private string username;
+        private string sessionKey;
+
+        public OutputWindow(string username, string sessionKey)
+        {
+            this.username = username;
+            this.sessionKey = sessionKey;
+        }
+
+        public void Start()
         {
             Console.Clear();
 
@@ -17,14 +28,27 @@ namespace Client
 
             Console.ForegroundColor = ConsoleColor.White;
 
-            Console.WriteLine("This would be the window where you receive messages.");
-
-            Console.ReadKey();
+            ConnectToInputWindow();
         }
 
         public void ConnectToInputWindow()
         {
+            IPEndPoint outputWindow = new IPEndPoint(IPAddress.Loopback, 90);
 
+            TcpClient client = new TcpClient();
+
+            NetworkManager.Connect(outputWindow, client);
+
+            NetworkStream stream = client.GetStream();
+
+            Protocol sessionData = ProtocolCreator.SessionData(this.username, this.sessionKey);
+
+            NetworkManager.SendMessage(sessionData, stream);
+
+            Console.WriteLine("Session data was successfully sent!");
+            Console.WriteLine("Username: {0}", this.username);
+            Console.WriteLine("Session Key: {0}", this.sessionKey);
+            Console.ReadKey();
         }
     }
 }

@@ -19,5 +19,11 @@ namespace Client
             byte[] userData = Encoding.ASCII.GetBytes(username + "-" + password);
             return new Protocol(ProtocolTypes.LoginRequest, userData);
         }
+
+        public static Protocol SessionData(string username, string sessionKey)
+        {
+            byte[] sessionData = Encoding.ASCII.GetBytes(username + "-" + sessionKey);
+            return new Protocol(ProtocolTypes.SessionData, sessionData);
+        }
     }
 }
