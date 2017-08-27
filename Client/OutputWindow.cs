@@ -58,8 +58,6 @@ namespace Client
 
         public void DisplayMessagesReceivedFromServer()
         {
-            Menu.ShowHeader();
-
             while (true)
             {
                 string messageProtocol = NetworkManager.ReadMessage(serverStream, 276);
