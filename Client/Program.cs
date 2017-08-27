@@ -10,7 +10,18 @@ namespace Client
     {
         public static void Main(string[] args)
         {
-            Menu.DisplayMainMenu();
+            if (args.Length != 0)
+            {
+                if (args[0] == "\\OpenInputWindow")
+                {
+                    InputWindow inputWindow = new InputWindow();
+                    inputWindow.Start();
+                }
+            }
+            else
+            {
+                Menu.DisplayMainMenu();
+            }
         }
     }
 }

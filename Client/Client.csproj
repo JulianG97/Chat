@@ -46,8 +46,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InputWindow.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="NetworkManager.cs" />
+    <Compile Include="OutputWindow.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Protocol\Protocol.cs" />

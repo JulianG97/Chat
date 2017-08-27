@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
+using System.Diagnostics;
 
 namespace Client
 {
@@ -186,6 +187,11 @@ namespace Client
                                 Console.CursorVisible = false;
 
                                 Console.ReadKey(true);
+
+                                Process.Start("Client.exe", "\\OpenInputWindow");
+
+                                OutputWindow outputWindow = new OutputWindow();
+                                outputWindow.Start(username, sessionKey);
                             }
                         }
                     }
