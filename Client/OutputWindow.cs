@@ -16,6 +16,7 @@ namespace Client
         private NetworkStream serverStream;
         private NetworkStream inputWindowStream;
         private Thread forwardMessages;
+        private static object locker;
 
         public OutputWindow(string username, string sessionKey, NetworkStream serverStream)
         {
@@ -75,7 +76,10 @@ namespace Client
 
                     string[] messageProtocolContent = messageString.Split('-');
 
-                    WriteMessage(messageProtocolContent[0], messageProtocolContent[1], messageProtocolContent[2], messageProtocolContent[3]);
+                    lock (locker)
+                    {
+                        WriteMessage(messageProtocolContent[0], messageProtocolContent[1], messageProtocolContent[2], messageProtocolContent[3]);
+                    }
                 }
             }
         }
