@@ -92,7 +92,8 @@ namespace Server
                 serverRunning = true;
 
                 Console.WriteLine("The sever has been started successfully!");
-                Console.WriteLine("IP Address: {0}", GetLocalIPAddress());
+                Console.WriteLine("External IP Address: {0}", GetExternalIPAddress());
+                Console.WriteLine("Internal IP Address: {0}", GetInternalIPAddress());
                 Console.WriteLine("Port: {0}", settings.ServerPort);
 
                 startServer.Start();
@@ -115,7 +116,7 @@ namespace Server
             }
         }
 
-        public static IPAddress GetLocalIPAddress()
+        public static IPAddress GetInternalIPAddress()
         {
             IPAddress[] localIPs = Dns.GetHostAddresses(Dns.GetHostName());
 
@@ -128,6 +129,27 @@ namespace Server
             }
 
             return IPAddress.Parse("0.0.0.0");
+        }
+
+        public static IPAddress GetExternalIPAddress()
+        {
+            string externalIPString = new WebClient().DownloadString("http://icanhazip.com");
+
+            char[] externalIPArray = externalIPString.ToCharArray();
+
+            string externalIP = string.Empty;
+
+            for (int i = 0; i < externalIPArray.Length; i++)
+            {
+                if (externalIPArray[i] == '\n')
+                {
+                    continue;
+                }
+
+                externalIP = externalIP + externalIPArray[i];
+            }
+
+            return IPAddress.Parse(externalIP);
         }
 
         public static void StartListening()
