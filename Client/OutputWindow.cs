@@ -78,8 +78,6 @@ namespace Client
 
                     WriteMessage(messageProtocolContent[0], messageProtocolContent[1], messageProtocolContent[2], messageProtocolContent[3]);
                 }
-
-                Thread.Sleep(10);
             }
         }
 
