@@ -90,5 +90,13 @@ namespace Server
         {
             return new Protocol(ProtocolTypes.LoginInvalid, new byte[0]);
         }
+
+        public static Protocol PublishMessage(string username, char userGroup, string message)
+        {
+            DateTime time = DateTime.Now;
+
+            byte[] userMessage = Encoding.ASCII.GetBytes(username + "-" + userGroup + "-" + time.ToString("HH:mm") + "-" + message);
+            return new Protocol(ProtocolTypes.PublishMessage, userMessage);
+        }
     }
 }

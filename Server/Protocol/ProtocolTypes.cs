@@ -54,5 +54,13 @@ namespace Server
         /// <para>Description: Login failed message sent from the server to the client.</para>
         /// </summary>
         public static byte[] LoginInvalid = { 76, 73 };
+
+        /// <summary>
+        /// The Publish Message Protocol Type.
+        /// <para>Value: Username-UserGroup-Time-Message</para>
+        /// <para>Length: 10 - 270 (+ 6)</para>
+        /// <para>Description: Message written by a user sent from the server to all clients.</para>
+        /// </summary>
+        public static byte[] PublishMessage = { 80, 77 };
     }
 }

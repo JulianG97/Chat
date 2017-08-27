@@ -11,6 +11,13 @@ namespace Server
 {
     public class UserRequestManager
     {
+        private List<User> onlineUser;
+
+        public UserRequestManager(List<User> onlineUser)
+        {
+            this.onlineUser = onlineUser;
+        }
+
         public void HandleUserRequest(string userRequest, TcpClient client, string userPath)
         {
             char[] splittedUserRequest = userRequest.ToCharArray();
@@ -48,7 +55,7 @@ namespace Server
             }
         }
 
-        public static void VerifyUserLogin(string username, string password, TcpClient client, string userPath)
+        public void VerifyUserLogin(string username, string password, TcpClient client, string userPath)
         {
             string path = userPath + @"\" + username + ".txt";
 
@@ -65,7 +72,15 @@ namespace Server
                     Protocol loginOK = ProtocolCreator.LoginOk();
                     NetworkManager.SendMessage(loginOK, client);
 
+                    string protocolString = loginOK.ToString();
+
+                    string[] protocolArray = protocolString.Split('-');
+
+                    this.onlineUser.Add(new User(username, client, protocolArray[2]));
+
                     Console.WriteLine("{0} ({1}) has logged in!", username, ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
+
+
                 }
                 else
                 {

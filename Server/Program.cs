@@ -13,10 +13,10 @@ namespace Server
 {
     public class Program
     {
-        private List<User> onlineUser = new List<User>();
+        private static List<User> onlineUser = new List<User>();
         private static bool serverRunning = false;
         private static TcpListener listener;
-        private static UserRequestManager userRequestManager = new UserRequestManager();
+        private static UserRequestManager userRequestManager = new UserRequestManager(onlineUser);
         private static Settings settings = new Settings();
 
         public static void Main(string[] args)
