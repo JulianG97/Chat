@@ -44,11 +44,6 @@ namespace Client
             Protocol sessionData = ProtocolCreator.SessionData(this.username, this.sessionKey);
 
             NetworkManager.SendMessage(sessionData, stream);
-
-            Console.WriteLine("Session data was successfully sent!");
-            Console.WriteLine("Username: {0}", this.username);
-            Console.WriteLine("Session Key: {0}", this.sessionKey);
-            Console.ReadKey();
         }
     }
 }

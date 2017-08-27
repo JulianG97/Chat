@@ -34,6 +34,7 @@ namespace Client
             Console.ForegroundColor = ConsoleColor.White;
 
             Console.WindowHeight = 3;
+            Console.WindowWidth = 120;
 
             ConnectToOutputWindow();
 
@@ -90,11 +91,6 @@ namespace Client
                     {
                         this.username = sessionData[0];
                         this.sessionKey = sessionData[1];
-
-                        Console.WriteLine("Session data was successfully received!");
-                        Console.WriteLine("Username: {0}", this.username);
-                        Console.WriteLine("Session Key: {0}", this.sessionKey);
-                        Console.ReadKey();
                     }
                 }
             }
@@ -104,7 +100,7 @@ namespace Client
         {
             Console.Clear();
 
-            Console.Write(">>");
+            Console.Write(">> ");
 
             string message = Console.ReadLine();
         }
