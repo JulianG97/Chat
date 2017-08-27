@@ -16,6 +16,7 @@ namespace Client
         private NetworkStream serverStream;
         private NetworkStream inputWindowStream;
         private Thread forwardMessages;
+        private static object locker = new object();
 
         public OutputWindow(string username, string sessionKey, NetworkStream serverStream)
         {
@@ -60,22 +61,25 @@ namespace Client
         {
             while (true)
             {
-                string messageProtocol = NetworkManager.ReadMessage(serverStream, 276);
-
-                char[] mesageProtocolArray = messageProtocol.ToCharArray();
-
-                if (messageProtocol[0] == 'C' && messageProtocol[1] == 'H' && messageProtocol[2] == 'A' && messageProtocol[3] == 'T' && messageProtocol[4] == 'P' && messageProtocol[5] == 'M')
+                lock (locker)
                 {
-                    string messageString = string.Empty;
+                    string messageProtocol = NetworkManager.ReadMessage(serverStream, 276);
 
-                    for (int i = 6; i < mesageProtocolArray.Length; i++)
+                    char[] mesageProtocolArray = messageProtocol.ToCharArray();
+
+                    if (messageProtocol[0] == 'C' && messageProtocol[1] == 'H' && messageProtocol[2] == 'A' && messageProtocol[3] == 'T' && messageProtocol[4] == 'P' && messageProtocol[5] == 'M')
                     {
-                        messageString = messageString + mesageProtocolArray[i];
+                        string messageString = string.Empty;
+
+                        for (int i = 6; i < mesageProtocolArray.Length; i++)
+                        {
+                            messageString = messageString + mesageProtocolArray[i];
+                        }
+
+                        string[] messageProtocolContent = messageString.Split('-');
+
+                        WriteMessage(messageProtocolContent[0], messageProtocolContent[1], messageProtocolContent[2], messageProtocolContent[3]);
                     }
-
-                    string[] messageProtocolContent = messageString.Split('-');
-
-                    WriteMessage(messageProtocolContent[0], messageProtocolContent[1], messageProtocolContent[2], messageProtocolContent[3]);
                 }
             }
         }
@@ -103,8 +107,6 @@ namespace Client
             Console.ForegroundColor = ConsoleColor.White;
 
             Console.Write(message);
-
-            Thread.Sleep(100);
         }
 
         public void ForwardMessagesToServer()
