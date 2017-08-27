@@ -61,26 +61,25 @@ namespace Client
         {
             while (true)
             {
-                lock (locker)
+                string messageProtocol = NetworkManager.ReadMessage(serverStream, 276);
+
+                char[] mesageProtocolArray = messageProtocol.ToCharArray();
+
+                if (messageProtocol[0] == 'C' && messageProtocol[1] == 'H' && messageProtocol[2] == 'A' && messageProtocol[3] == 'T' && messageProtocol[4] == 'P' && messageProtocol[5] == 'M')
                 {
-                    string messageProtocol = NetworkManager.ReadMessage(serverStream, 276);
+                    string messageString = string.Empty;
 
-                    char[] mesageProtocolArray = messageProtocol.ToCharArray();
-
-                    if (messageProtocol[0] == 'C' && messageProtocol[1] == 'H' && messageProtocol[2] == 'A' && messageProtocol[3] == 'T' && messageProtocol[4] == 'P' && messageProtocol[5] == 'M')
+                    for (int i = 6; i < mesageProtocolArray.Length; i++)
                     {
-                        string messageString = string.Empty;
-
-                        for (int i = 6; i < mesageProtocolArray.Length; i++)
-                        {
-                            messageString = messageString + mesageProtocolArray[i];
-                        }
-
-                        string[] messageProtocolContent = messageString.Split('-');
-
-                        WriteMessage(messageProtocolContent[0], messageProtocolContent[1], messageProtocolContent[2], messageProtocolContent[3]);
+                        messageString = messageString + mesageProtocolArray[i];
                     }
+
+                    string[] messageProtocolContent = messageString.Split('-');
+
+                    WriteMessage(messageProtocolContent[0], messageProtocolContent[1], messageProtocolContent[2], messageProtocolContent[3]);
                 }
+
+                Thread.Sleep(10);
             }
         }
 
