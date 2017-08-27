@@ -19,6 +19,7 @@ A simple C# chat for the console
 | LO | Login OK | Sessionkey | 32 (+ 6) | Login OK message with session key sent from the server to the client |
 | LI | Login Invalid | - | 0 (+ 6) | Login failed message sent from the server to the client |
 | ME | Message | Username-Message-Sessionkey | 36 - 296 (+ 6) | Message forwarded from the output window to the server (Username Length: 3 - 10 byte; Message Length: 1 - 254 byte) |
+| PM | Publish Message | Username-UserGroup-Time-Message | 10 - 270 (+ 6) | Message written by a user sent from the server to all clients (Username Length: 3 - 10 byte; UserGroup Length: 1 byte; Time Length: 5 byte; Message Length: 1 - 254 byte)
 
 ### Protocol Types InputWindow-OutputWindow
 
