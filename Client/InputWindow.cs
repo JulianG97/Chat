@@ -15,15 +15,8 @@ namespace Client
         private int serverPort;
         private TcpListener listener = new TcpListener(IPAddress.Any, 90);
         private NetworkStream outputWindowStream;
-        private NetworkStream serverStream;
         private string username;
         private string sessionKey;
-
-        public InputWindow(IPAddress serverIP, int serverPort)
-        {
-            this.serverIP = serverIP;
-            this.serverPort = serverPort;
-        }
 
         public void Start()
         {
@@ -38,8 +31,6 @@ namespace Client
 
             ConnectToOutputWindow();
 
-            ConnectToServer();
-
             while (true)
             {
                 EnterMessage();
@@ -53,17 +44,6 @@ namespace Client
             TcpClient client = listener.AcceptTcpClient();
 
             GetSessionData(client);
-        }
-
-        public void ConnectToServer()
-        {
-            IPEndPoint server = new IPEndPoint(this.serverIP, this.serverPort);
-
-            TcpClient client = new TcpClient();
-
-            NetworkManager.Connect(server, client);
-
-            this.serverStream = client.GetStream();
         }
 
         public void GetSessionData(TcpClient client)
@@ -102,7 +82,12 @@ namespace Client
 
             Console.Write(">> ");
 
-            string message = Console.ReadLine();
+            bool exit;
+
+            string message = Menu.GetStringWithASpecificLength(254, 4, 0, out exit, true);
+
+            Protocol userMessage = ProtocolCreator.Message(this.username, message, this.sessionKey);
+            NetworkManager.SendMessage(userMessage, outputWindowStream);
         }
     }
 }

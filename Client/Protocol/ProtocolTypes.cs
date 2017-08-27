@@ -62,5 +62,13 @@ namespace Client
         /// <para>Description: Session data sent from the output window to the input window.</para>
         /// </summary>
         public static byte[] SessionData = { 83, 68 };
+
+        /// <summary>
+        /// The Message Protocol Type.
+        /// <para>Value: Username-Message-Sessionkey</para>
+        /// <para>Length: 36 - 296 (+ 6)</para>
+        /// <para>Description: Message written by the user sent from the input window to the output window and from the output window to the server.</para>
+        /// </summary>
+        public static byte[] Message = { 77, 69 };
     }
 }

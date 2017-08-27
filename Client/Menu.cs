@@ -177,20 +177,9 @@ namespace Client
                                     sessionKey = sessionKey + loginResponseArray[i];
                                 }
 
-                                Console.WriteLine();
-                                Console.WriteLine();
-                                Console.WriteLine("You have logged in successfully!");
-                                Console.WriteLine("Your session key is: {0}", sessionKey);
-                                Console.WriteLine();
-                                Console.WriteLine("Press any key to continue!");
-
-                                Console.CursorVisible = false;
-
-                                Console.ReadKey(true);
-
                                 Process.Start("Client.exe", "OpenInputWindow" + " " + settings.ServerIP + " " + settings.ServerPort);
 
-                                OutputWindow outputWindow = new OutputWindow(username, sessionKey);
+                                OutputWindow outputWindow = new OutputWindow(username, sessionKey, stream);
                                 outputWindow.Start();
                             }
                         }

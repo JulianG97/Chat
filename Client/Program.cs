@@ -18,7 +18,7 @@ namespace Client
 
                 if (args[0] == "OpenInputWindow" && IPAddress.TryParse(args[1], out serverIp) == true && int.TryParse(args[2], out serverPort) == true)
                 {
-                    InputWindow inputWindow = new InputWindow(serverIp, serverPort);
+                    InputWindow inputWindow = new InputWindow();
                     inputWindow.Start();
                 }
             }
