@@ -11,8 +11,6 @@ namespace Client
 {
     public class InputWindow
     {
-        private IPAddress serverIP;
-        private int serverPort;
         private TcpListener listener = new TcpListener(IPAddress.Any, 90);
         private NetworkStream outputWindowStream;
         private string username;
@@ -44,6 +42,11 @@ namespace Client
             TcpClient client = listener.AcceptTcpClient();
 
             GetSessionData(client);
+
+            while (true)
+            {
+                EnterMessage();
+            }
         }
 
         public void GetSessionData(TcpClient client)
@@ -84,7 +87,7 @@ namespace Client
 
             bool exit;
 
-            string message = Menu.GetStringWithASpecificLength(254, 4, 0, out exit, true);
+            string message = Menu.GetStringWithASpecificLength(100, 3, 0, out exit, true);
 
             Protocol userMessage = ProtocolCreator.Message(this.username, message, this.sessionKey);
             NetworkManager.SendMessage(userMessage, outputWindowStream);
