@@ -75,7 +75,7 @@ namespace Client
 
                     string[] messageProtocolContent = messageString.Split('-');
 
-                    WriteMessage(messageProtocolContent[0], messageProtocolContent[2], messageProtocolContent[3], messageProtocolContent[4]);
+                    WriteMessage(messageProtocolContent[0], messageProtocolContent[1], messageProtocolContent[2], messageProtocolContent[3]);
                 }
             }
         }
