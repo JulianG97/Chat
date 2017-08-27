@@ -120,7 +120,7 @@ namespace Server
         {
             IPAddress[] localIPs = Dns.GetHostAddresses(Dns.GetHostName());
 
-            foreach(IPAddress ip in localIPs)
+            foreach (IPAddress ip in localIPs)
             {
                 if (ip.AddressFamily == AddressFamily.InterNetwork)
                 {
