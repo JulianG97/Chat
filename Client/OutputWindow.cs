@@ -16,7 +16,6 @@ namespace Client
         private NetworkStream serverStream;
         private NetworkStream inputWindowStream;
         private Thread forwardMessages;
-        private static object locker;
 
         public OutputWindow(string username, string sessionKey, NetworkStream serverStream)
         {
@@ -76,10 +75,7 @@ namespace Client
 
                     string[] messageProtocolContent = messageString.Split('-');
 
-                    lock (locker)
-                    {
-                        WriteMessage(messageProtocolContent[0], messageProtocolContent[1], messageProtocolContent[2], messageProtocolContent[3]);
-                    }
+                    WriteMessage(messageProtocolContent[0], messageProtocolContent[1], messageProtocolContent[2], messageProtocolContent[3]);
                 }
             }
         }
@@ -107,6 +103,8 @@ namespace Client
             Console.ForegroundColor = ConsoleColor.White;
 
             Console.Write(message);
+
+            Thread.Sleep(100);
         }
 
         public void ForwardMessagesToServer()
