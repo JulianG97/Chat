@@ -39,14 +39,20 @@ namespace Server
 
                     string[] messageProtocolContent = messageString.Split('-');
 
-                    Protocol message = ProtocolCreator.PublishMessage(messageProtocolContent[0], userGroup, messageProtocolContent[1]);
-                    NetworkManager.SendMessage(message, client);
+                    Protocol message = ProtocolCreator.PublishMessage(messageProtocolContent[0], GetUserGroup(messageProtocolContent[0]), messageProtocolContent[1]);
+
+                    foreach (User user in onlineUser)
+                    {
+                        NetworkManager.SendMessage(message, user.Client);
+                    }
                 }
             }
         }
 
-        public void GetUserGroup(string username)
+        public char GetUserGroup(string username)
         {
+            char userGroup = 'U';
+
             string configPath = Directory.GetCurrentDirectory();
             configPath = configPath + @"\config.txt";
 
@@ -78,11 +84,30 @@ namespace Server
 
                             char[] userGroupArray = userFileArray[2].ToCharArray();
 
-                            if (userGroupArray[0] == 'U' && userGroupArray[1] == 's' && userGroupArray[2] == 'e' && userGroupArray[3] == 'r' && userGroupArray[4] == ' ' && userGroupArray[5] == 'G' && userGroupArray[6] == 'r' && userGroupArray[7] == 'o' && userGroupArray[8] == 'u' && userGroupArray[9] == 'p')
+                            if (userGroupArray[0] == 'U' && userGroupArray[1] == 's' && userGroupArray[2] == 'e' && userGroupArray[3] == 'r' && userGroupArray[4] == ' ' && userGroupArray[5] == 'G' && userGroupArray[6] == 'r' && userGroupArray[7] == 'o' && userGroupArray[8] == 'u' && userGroupArray[9] == 'p' && userGroupArray[10] == ':' && userGroupArray[11] == ' ')
+                            {
+                                string userGroupString = string.Empty;
+
+                                for (int i = 12; i < userGroupArray.Length; i++)
+                                {
+                                    userGroupString = userGroupString + userGroupArray[i];
+                                }
+
+                                if (userGroupString == "Admin")
+                                {
+                                    userGroup = 'A';
+                                }
+                                else if (userGroupString == "Mod")
+                                {
+                                    userGroup = 'M';
+                                }
+                            }
                         }
                     }
                 }
             }
+
+            return userGroup;
         }
     }
 }

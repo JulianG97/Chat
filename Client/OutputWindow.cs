@@ -58,7 +58,53 @@ namespace Client
 
         public void DisplayMessagesReceivedFromServer()
         {
+            Menu.ShowHeader();
 
+            while (true)
+            {
+                string messageProtocol = NetworkManager.ReadMessage(serverStream, 276);
+
+                char[] mesageProtocolArray = messageProtocol.ToCharArray();
+
+                if (messageProtocol[0] == 'C' && messageProtocol[1] == 'H' && messageProtocol[2] == 'A' && messageProtocol[3] == 'T' && messageProtocol[4] == 'P' && messageProtocol[5] == 'M')
+                {
+                    string messageString = string.Empty;
+
+                    for (int i = 6; i < mesageProtocolArray.Length; i++)
+                    {
+                        messageString = messageString + mesageProtocolArray[i];
+                    }
+
+                    string[] messageProtocolContent = messageString.Split('-');
+
+                    WriteMessage(messageProtocolContent[0], messageProtocolContent[2], messageProtocolContent[3], messageProtocolContent[4]);
+                }
+            }
+        }
+
+        public void WriteMessage(string username, string userGroup, string time, string message)
+        {
+            Console.WriteLine();
+
+            Console.ForegroundColor = ConsoleColor.White;
+
+            Console.Write("[" + time + "]");
+
+            switch (userGroup)
+            {
+                case "A":
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    break;
+                case "M":
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    break;
+            }
+
+            Console.Write(username + ": ");
+
+            Console.ForegroundColor = ConsoleColor.White;
+
+            Console.Write(message);
         }
 
         public void ForwardMessagesToServer()
