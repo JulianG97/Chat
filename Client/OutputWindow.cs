@@ -34,6 +34,8 @@ namespace Client
             Console.ForegroundColor = ConsoleColor.White;
 
             ConnectToInputWindow();
+
+            DisplayMessagesReceivedFromServer();
         }
 
         public void ConnectToInputWindow()
@@ -52,8 +54,6 @@ namespace Client
 
             this.forwardMessages = new Thread(ForwardMessagesToServer);
             forwardMessages.Start();
-
-            DisplayMessagesReceivedFromServer();
         }
 
         public void DisplayMessagesReceivedFromServer()

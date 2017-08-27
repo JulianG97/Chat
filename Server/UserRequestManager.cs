@@ -88,6 +88,9 @@ namespace Server
                         this.onlineUser.Add(new User(username, client, sessionKey));
 
                         Console.WriteLine("{0} ({1}) has logged in!", username, ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
+
+                        MessageManager messageManager = new MessageManager(this.onlineUser, client);
+                        messageManager.ForwardMessagesToAllClients();
                     }
                 }
                 else
