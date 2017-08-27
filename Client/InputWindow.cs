@@ -85,9 +85,7 @@ namespace Client
 
             Console.Write(">> ");
 
-            bool exit;
-
-            string message = Menu.GetStringWithASpecificLength(100, 3, 0, out exit, true);
+            string message = Console.ReadLine();
 
             Protocol userMessage = ProtocolCreator.Message(this.username, message, this.sessionKey);
             NetworkManager.SendMessage(userMessage, outputWindowStream);
