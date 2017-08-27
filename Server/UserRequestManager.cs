@@ -74,13 +74,21 @@ namespace Server
 
                     string protocolString = loginOK.ToString();
 
-                    string[] protocolArray = protocolString.Split('-');
+                    char[] protocolStringArray = protocolString.ToCharArray();
 
-                    this.onlineUser.Add(new User(username, client, protocolArray[2]));
+                    string sessionKey = string.Empty;
 
-                    Console.WriteLine("{0} ({1}) has logged in!", username, ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
+                    if (protocolStringArray[0] == 'C' && protocolStringArray[1] == 'H' && protocolStringArray[2] == 'A' && protocolStringArray[3] == 'T' && protocolStringArray[4] == 'L' && protocolStringArray[5] == 'O')
+                    {
+                        for (int i = 6; i < protocolStringArray.Length; i++)
+                        {
+                            sessionKey = sessionKey + protocolStringArray[i];
+                        }
 
+                        this.onlineUser.Add(new User(username, client, sessionKey));
 
+                        Console.WriteLine("{0} ({1}) has logged in!", username, ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
+                    }
                 }
                 else
                 {
