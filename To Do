@@ -1,0 +1,9 @@
+- Check if session key from messages is valid
+- Close connections from all clients when server has been stopped
+- IsALive Client-Server and OutputWindow-InputWindow
+- Bug: Protocol is shown in output window when user writes messages too fast
+- Bug: Server crashes when client window is closed
+- Bug: Client crashes when server window is closed
+- Bug: Output window crashes when input window is closed
+- Solution for: Don't read from network stream when stream has been already closed
+- Rewrite class design
