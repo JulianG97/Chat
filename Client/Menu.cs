@@ -152,13 +152,11 @@ namespace Client
 
                         NetworkManager.Connect(server, client);
 
-                        NetworkStream stream = client.GetStream();
-
                         Protocol loginRequest = ProtocolCreator.LoginRequest(username, password);
 
-                        NetworkManager.SendMessage(loginRequest, stream);
+                        NetworkManager.SendMessage(loginRequest, client);
 
-                        string loginResponse = NetworkManager.ReadMessage(stream, 38);
+                        string loginResponse = NetworkManager.ReadMessage(client, 38);
 
                         if (loginResponse == "CHATLI")
                         {
@@ -179,7 +177,7 @@ namespace Client
 
                                 Process.Start("Client.exe", "OpenInputWindow" + " " + settings.ServerIP + " " + settings.ServerPort);
 
-                                OutputWindow outputWindow = new OutputWindow(username, sessionKey, stream);
+                                OutputWindow outputWindow = new OutputWindow(username, sessionKey, client);
                                 outputWindow.Start();
                             }
                         }
@@ -291,13 +289,11 @@ namespace Client
 
                             NetworkManager.Connect(server, client);
 
-                            NetworkStream stream = client.GetStream();
-
                             Protocol registrationRequest = ProtocolCreator.RegistrationRequest(username, password);
 
-                            NetworkManager.SendMessage(registrationRequest, stream);
+                            NetworkManager.SendMessage(registrationRequest, client);
 
-                            string registrationResponse = NetworkManager.ReadMessage(stream, 6);
+                            string registrationResponse = NetworkManager.ReadMessage(client, 6);
 
                             if (registrationResponse == "CHATRI")
                             {

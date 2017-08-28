@@ -12,7 +12,7 @@ namespace Client
     public class InputWindow
     {
         private TcpListener listener = new TcpListener(IPAddress.Any, 90);
-        private NetworkStream outputWindowStream;
+        private TcpClient outputWindowClient;
         private string username;
         private string sessionKey;
 
@@ -39,9 +39,9 @@ namespace Client
         {
             listener.Start();
 
-            TcpClient client = listener.AcceptTcpClient();
+            outputWindowClient = listener.AcceptTcpClient();
 
-            GetSessionData(client);
+            GetSessionData(outputWindowClient);
 
             while (true)
             {
@@ -49,32 +49,27 @@ namespace Client
             }
         }
 
-        public void GetSessionData(TcpClient client)
+        public void GetSessionData(TcpClient outputWindowClient)
         {
-            this.outputWindowStream = client.GetStream();
+            string sessionDataProtocol = NetworkManager.ReadMessage(outputWindowClient, 48);
 
-            if (outputWindowStream.CanWrite && outputWindowStream.CanRead)
+            char[] sessionDataArray = sessionDataProtocol.ToCharArray();
+
+            if (sessionDataArray[0] == 'C' && sessionDataArray[1] == 'H' && sessionDataArray[2] == 'A' && sessionDataArray[3] == 'T' && sessionDataArray[4] == 'S' && sessionDataArray[5] == 'D')
             {
-                string sessionDataProtocol = NetworkManager.ReadMessage(outputWindowStream, 48);
+                string sessionDataString = string.Empty;
 
-                char[] sessionDataArray = sessionDataProtocol.ToCharArray();
-
-                if (sessionDataArray[0] == 'C' && sessionDataArray[1] == 'H' && sessionDataArray[2] == 'A' && sessionDataArray[3] == 'T' && sessionDataArray[4] == 'S' && sessionDataArray[5] == 'D')
+                for (int i = 6; i < sessionDataArray.Length; i++)
                 {
-                    string sessionDataString = string.Empty;
+                    sessionDataString = sessionDataString + sessionDataArray[i];
+                }
 
-                    for (int i = 6; i < sessionDataArray.Length; i++)
-                    {
-                        sessionDataString = sessionDataString + sessionDataArray[i];
-                    }
+                string[] sessionData = sessionDataString.Split('-');
 
-                    string[] sessionData = sessionDataString.Split('-');
-
-                    if (sessionData.Length == 2)
-                    {
-                        this.username = sessionData[0];
-                        this.sessionKey = sessionData[1];
-                    }
+                if (sessionData.Length == 2)
+                {
+                    this.username = sessionData[0];
+                    this.sessionKey = sessionData[1];
                 }
             }
         }
@@ -88,7 +83,7 @@ namespace Client
             string message = Console.ReadLine();
 
             Protocol userMessage = ProtocolCreator.Message(this.username, message, this.sessionKey);
-            NetworkManager.SendMessage(userMessage, outputWindowStream);
+            NetworkManager.SendMessage(userMessage, outputWindowClient);
         }
     }
 }

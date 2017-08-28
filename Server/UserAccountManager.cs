@@ -9,13 +9,12 @@ using System.IO;
 
 namespace Server
 {
-    public class UserRequestManager
+    public class UserAccountManager
     {
-        private List<User> onlineUser;
-
-        public UserRequestManager(List<User> onlineUser)
+        public List<User> OnlineUser
         {
-            this.onlineUser = onlineUser;
+            get;
+            set;
         }
 
         public void HandleUserRequest(string userRequest, TcpClient client, string userPath)
@@ -85,11 +84,13 @@ namespace Server
                             sessionKey = sessionKey + protocolStringArray[i];
                         }
 
-                        this.onlineUser.Add(new User(username, client, sessionKey));
+                        this.OnlineUser = new List<User>();
+
+                        this.OnlineUser.Add(new User(username, client, sessionKey));
 
                         Console.WriteLine("{0} ({1}) has logged in!", username, ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
 
-                        MessageManager messageManager = new MessageManager(this.onlineUser, client);
+                        MessageManager messageManager = new MessageManager(this.OnlineUser, client);
                         messageManager.ForwardMessagesToAllClients();
                     }
                 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
 using System.IO;
+using System.Threading;
 
 namespace Server
 {
@@ -24,27 +25,42 @@ namespace Server
         {
             while (true)
             {
-                string messageProtocol = NetworkManager.ReadMessage(client, 302);
-
-                char[] mesageProtocolArray = messageProtocol.ToCharArray();
-
-                if (messageProtocol[0] == 'C' && messageProtocol[1] == 'H' && messageProtocol[2] == 'A' && messageProtocol[3] == 'T' && messageProtocol[4] == 'M' && messageProtocol[5] == 'E')
+                if (client.Connected == true)
                 {
-                    string messageString = string.Empty;
+                    NetworkStream clientStream = client.GetStream();
 
-                    for (int i = 6; i < mesageProtocolArray.Length; i++)
+                    if (clientStream.DataAvailable == false)
                     {
-                        messageString = messageString + mesageProtocolArray[i];
+                        Thread.Sleep(100);
+                        continue;
                     }
 
-                    string[] messageProtocolContent = messageString.Split('-');
+                    string messageProtocol = NetworkManager.ReadMessage(client, 302);
 
-                    Protocol message = ProtocolCreator.PublishMessage(messageProtocolContent[0], GetUserGroup(messageProtocolContent[0]), messageProtocolContent[1]);
+                    char[] mesageProtocolArray = messageProtocol.ToCharArray();
 
-                    foreach (User user in onlineUser)
+                    if (messageProtocol[0] == 'C' && messageProtocol[1] == 'H' && messageProtocol[2] == 'A' && messageProtocol[3] == 'T' && messageProtocol[4] == 'M' && messageProtocol[5] == 'E')
                     {
-                        NetworkManager.SendMessage(message, user.Client);
+                        string messageString = string.Empty;
+
+                        for (int i = 6; i < mesageProtocolArray.Length; i++)
+                        {
+                            messageString = messageString + mesageProtocolArray[i];
+                        }
+
+                        string[] messageProtocolContent = messageString.Split('-');
+
+                        Protocol message = ProtocolCreator.PublishMessage(messageProtocolContent[0], GetUserGroup(messageProtocolContent[0]), messageProtocolContent[1]);
+
+                        foreach (User user in onlineUser)
+                        {
+                            NetworkManager.SendMessage(message, user.Client);
+                        }
                     }
+                }
+                else
+                {
+                    break;
                 }
             }
         }

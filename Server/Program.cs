@@ -13,10 +13,9 @@ namespace Server
 {
     public class Program
     {
-        private static List<User> onlineUser = new List<User>();
         private static bool serverRunning = false;
         private static TcpListener listener;
-        private static UserRequestManager userRequestManager = new UserRequestManager(onlineUser);
+        private static UserAccountManager userAccountManager = new UserAccountManager();
         private static Settings settings = new Settings();
 
         public static void Main(string[] args)
@@ -108,6 +107,15 @@ namespace Server
 
                 listener.Stop();
 
+                foreach (User user in userAccountManager.OnlineUser)
+                {
+                    if (user.Client.Connected == true)
+                    {
+                        NetworkStream userStream = user.Client.GetStream();
+                        userStream.Close();
+                    }
+                }
+
                 Console.WriteLine("The server has been stopped successfully!");
             }
             else if (serverRunning == false)
@@ -181,7 +189,7 @@ namespace Server
             {
                 string userRequest = NetworkManager.ReadMessage(client, 28);
 
-                userRequestManager.HandleUserRequest(userRequest, client, settings.ServerUserPath);
+                userAccountManager.HandleUserRequest(userRequest, client, settings.ServerUserPath);
             }
         }
     }

@@ -13,16 +13,16 @@ namespace Client
     {
         private string username;
         private string sessionKey;
-        private NetworkStream serverStream;
-        private NetworkStream inputWindowStream;
+        private TcpClient serverClient;
+        private TcpClient inputWindowClient;
         private Thread forwardMessages;
         private static object locker = new object();
 
-        public OutputWindow(string username, string sessionKey, NetworkStream serverStream)
+        public OutputWindow(string username, string sessionKey, TcpClient serverClient)
         {
             this.username = username;
             this.sessionKey = sessionKey;
-            this.serverStream = serverStream;
+            this.serverClient = serverClient;
         }
 
         public void Start()
@@ -44,15 +44,13 @@ namespace Client
         {
             IPEndPoint outputWindow = new IPEndPoint(IPAddress.Loopback, 90);
 
-            TcpClient client = new TcpClient();
+            this.inputWindowClient = new TcpClient();
 
-            NetworkManager.Connect(outputWindow, client);
-
-            this.inputWindowStream = client.GetStream();
+            NetworkManager.Connect(outputWindow, inputWindowClient);
 
             Protocol sessionData = ProtocolCreator.SessionData(this.username, this.sessionKey);
 
-            NetworkManager.SendMessage(sessionData, this.inputWindowStream);
+            NetworkManager.SendMessage(sessionData, this.inputWindowClient);
 
             this.forwardMessages = new Thread(ForwardMessagesToServer);
             forwardMessages.Start();
@@ -62,7 +60,7 @@ namespace Client
         {
             while (true)
             {
-                string messageProtocol = NetworkManager.ReadMessage(serverStream, 276);
+                string messageProtocol = NetworkManager.ReadMessage(serverClient, 276);
 
                 char[] mesageProtocolArray = messageProtocol.ToCharArray();
 
@@ -111,7 +109,7 @@ namespace Client
         {
             while (true)
             {
-                string messageProtocol = NetworkManager.ReadMessage(inputWindowStream, 302);
+                string messageProtocol = NetworkManager.ReadMessage(inputWindowClient, 302);
 
                 char[] mesageProtocolArray = messageProtocol.ToCharArray();
 
@@ -127,7 +125,7 @@ namespace Client
                     string[] messageProtocolContent = messageString.Split('-');
 
                     Protocol message = ProtocolCreator.Message(messageProtocolContent[0], messageProtocolContent[1], messageProtocolContent[2]);
-                    NetworkManager.SendMessage(message, serverStream);
+                    NetworkManager.SendMessage(message, serverClient);
                 }
             }
         }

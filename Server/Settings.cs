@@ -21,13 +21,20 @@ namespace Server
             set;
         }
 
+        public string GetConfigFilePath()
+        {
+            string configPath = Directory.GetCurrentDirectory();
+            configPath = configPath + @"\config.txt";
+
+            return configPath;
+        }
+
         public void CheckConfigFile()
         {
             int port;
             string userPath;
 
-            string configPath = Directory.GetCurrentDirectory();
-            configPath = configPath + @"\config.txt";
+            string configPath = this.GetConfigFilePath();
 
             if (File.Exists(configPath) == true)
             {
@@ -62,14 +69,14 @@ namespace Server
 
         public void GenerateDefaultConfigFile()
         {
-            string configPath = Directory.GetCurrentDirectory();
+            string configPath = GetConfigFilePath();
 
             string[] configFile = new string[2];
 
             configFile[0] = "Port: 80";
             configFile[1] = "User Path: " + configPath + @"\User";
 
-            File.WriteAllLines(configPath + @"\config.txt", configFile);
+            File.WriteAllLines(configPath, configFile);
 
             if (Directory.Exists(configPath + @"\User") == false)
             {

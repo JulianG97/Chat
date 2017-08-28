@@ -55,7 +55,7 @@
     <Compile Include="Protocol\ProtocolTypes.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="User.cs" />
-    <Compile Include="UserRequestManager.cs" />
+    <Compile Include="UserAccountManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
