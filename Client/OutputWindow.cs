@@ -28,6 +28,7 @@ namespace Client
         public void Start()
         {
             Console.Clear();
+            Console.CursorVisible = false;
 
             Menu.ShowHeader();
             Console.WriteLine();
