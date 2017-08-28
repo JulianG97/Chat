@@ -12,13 +12,13 @@ namespace Server
 {
     public class MessageManager
     {
-        private List<User> onlineUser;
         private TcpClient client;
+        private UserAccountManager userAccountManager;
 
-        public MessageManager(List<User> onlineUser, TcpClient client)
+        public MessageManager(UserAccountManager userAccountManager, TcpClient client)
         {
-            this.onlineUser = onlineUser;
             this.client = client;
+            this.userAccountManager = userAccountManager;
         }
 
         public void ForwardMessagesToAllClients()
@@ -52,11 +52,13 @@ namespace Server
 
                         Protocol message = ProtocolCreator.PublishMessage(messageProtocolContent[0], GetUserGroup(messageProtocolContent[0]), messageProtocolContent[1]);
 
-                        foreach (User user in onlineUser)
+                        foreach (User user in userAccountManager.OnlineUser)
                         {
                             NetworkManager.SendMessage(message, user.Client);
                         }
                     }
+
+                    Thread.Sleep(100);
                 }
                 else
                 {

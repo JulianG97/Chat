@@ -17,6 +17,11 @@ namespace Server
             set;
         }
 
+        public UserAccountManager()
+        {
+            this.OnlineUser = new List<User>();
+        }
+
         public void HandleUserRequest(string userRequest, TcpClient client, string userPath)
         {
             char[] splittedUserRequest = userRequest.ToCharArray();
@@ -84,13 +89,11 @@ namespace Server
                             sessionKey = sessionKey + protocolStringArray[i];
                         }
 
-                        this.OnlineUser = new List<User>();
-
                         this.OnlineUser.Add(new User(username, client, sessionKey));
 
                         Console.WriteLine("{0} ({1}) has logged in!", username, ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
 
-                        MessageManager messageManager = new MessageManager(this.OnlineUser, client);
+                        MessageManager messageManager = new MessageManager(this, client);
                         messageManager.ForwardMessagesToAllClients();
                     }
                 }

@@ -12,11 +12,17 @@ namespace Server
     {
         public static void SendMessage(Protocol protocol, TcpClient client)
         {
-            NetworkStream stream = client.GetStream();
+            if (client.Connected == true)
+            {
+                NetworkStream stream = client.GetStream();
 
-            byte[] sendBuffer = protocol.Create();
+                byte[] sendBuffer = protocol.Create();
 
-            stream.Write(sendBuffer, 0, sendBuffer.Length);
+                if (client.Connected == true)
+                {
+                    stream.Write(sendBuffer, 0, sendBuffer.Length);
+                }
+            }
         }
 
         public static string ReadMessage(TcpClient client, int messageLength)
