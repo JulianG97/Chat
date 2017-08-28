@@ -107,12 +107,15 @@ namespace Server
 
                 listener.Stop();
 
-                foreach (User user in userAccountManager.OnlineUser)
+                if (userAccountManager.OnlineUser != null)
                 {
-                    if (user.Client.Connected == true)
+                    foreach (User user in userAccountManager.OnlineUser)
                     {
-                        NetworkStream userStream = user.Client.GetStream();
-                        userStream.Close();
+                        if (user.Client.Connected == true)
+                        {
+                            NetworkStream userStream = user.Client.GetStream();
+                            userStream.Close();
+                        }
                     }
                 }
 
